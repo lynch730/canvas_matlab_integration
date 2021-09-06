@@ -185,13 +185,13 @@ function update_explorer_window( folder_to_open )
         str2 = ['open ',folder_to_open];
     elseif isunix
         str1 = 'killall nautilus > /dev/null';
-        str2 = ['nautilus "',folder_to_open,'"'];
+        str2 = ['nautilus "',folder_to_open,'" &'];
     else
         error('OS not supported')
     end
     
     % Run Commands
     [~,~] = system(str1);
-    system(str2);
+    [~,~] = system(str2);
     
 end
