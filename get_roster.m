@@ -9,6 +9,10 @@ function class_roster = get_roster( roster_mat_file )
         roster_mat_file = 'roster.mat';
     end
     
+    % Add path to the folder where this function lives
+    fpath = erase( mfilename('fullpath'), mfilename );
+    roster_mat_file = [fpath, roster_mat_file];
+    
     % Load Roster MAT file if it exists (Nx2)
     if exist(roster_mat_file,'file')
         
