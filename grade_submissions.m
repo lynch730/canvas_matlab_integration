@@ -66,25 +66,43 @@
         end
         
         % Find script index
-        idx = find( flags==-1, 1 );
+        idx = find( flags==-1 );
         
-        % Select index
+        % Open the script to run
         if isempty(idx)
             disp('No Script file to run!')
         else
+            
+            % Fork if there are multiple scripts in idx
+            if numel(idx)>1
+                
+                % provide user of the options
+                fprintf('\nMultiple Scripts in File:\n');
+                for i=1:numel(idx)
+                    fprintf('\t%i - ',i);
+                    fprintf('%s\n', files(idx(i)).name );
+                end
+                
+                % Prompit Selection
+                iselect = input('Enter Script to Run:\n');
+                
+                % Limit to Selection
+                idx = idx( iselect );
+                
+            end
             
             % Create the main file
             probable_main = [files(j).folder, filesep, files(idx).name];
             
             % Create string of file to run
             mfile_to_run = erase(files(idx).name,'.m' );
-
+            
             % Lock current workspace from 
             save( 'temporary_save_state.mat' );
-
+            
             % Clear all but name of file to run 
             clearvars -except mfile_to_run temp_state_file; 
-
+            
             % Run script 
             try
                 run( mfile_to_run );
