@@ -84,18 +84,17 @@
                 end
                 
                 % Prompit Selection
-                iselect = input('Enter Script to Run:\n');
-                
-                % Limit to Selection
-                idx = idx( iselect );
+                flag = true;
+                while flag
+                    try
+                        mfile_to_run = erase(files(idx( iselect )).name,'.m' );
+                        flag = false;
+                    catch
+                        iselect = input('Enter Script to Run:\n');
+                    end
+                end
                 
             end
-            
-            % Create the main file
-            probable_main = [files(j).folder, filesep, files(idx).name];
-            
-            % Create string of file to run
-            mfile_to_run = erase(files(idx).name,'.m' );
             
             % Lock current workspace from 
             save( 'temporary_save_state.mat' );
@@ -119,14 +118,22 @@
         end
         
         % Remove folder from path
-        rmpath(spath.subfolders{i})
+        warning('off','MATLAB:rmpath:DirNotFound')
+        rmpath( spath.subfolders{i} )
         
         % Wait for input
-        dum = input('\nPrompt: enter/-1/index to continue/quit/jump-to: \n');
+        fprintf('\n Ready for new user. Enter:');
+        fprintf('\n\t enter to continue to next');
+        fprintf('\n\t -1 to quit');
+        fprintf('\n\t 0  to repeat');
+        fprintf('\n\t or the student number to jump to\n');
+        dum = input('');
         
         % Process input as integer or a given index
         if isnumeric(dum)
-            if floor(dum)==dum
+            if dum==0
+                % do nothing
+            elseif floor(dum)==dum
                 i = dum;
             else
                 i = i + 1;
