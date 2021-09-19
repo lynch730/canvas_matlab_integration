@@ -63,6 +63,11 @@
             % Script Type
             flags(j) = local_isfunction( files(j).name );
             
+            % Check for p files (to ignore)
+            if (endsWith(file_path,'.p'))
+                flags(j) = 0;
+            end
+            
         end
         
         % Find script index
@@ -79,13 +84,14 @@
                 
                 % provide user of the options
                 fprintf('\nMultiple Scripts in File:\n');
-                for i=1:numel(idx)
-                    fprintf('\t%i - ',i);
-                    fprintf('%s\n', files(idx(i)).name );
+                for j=1:numel(idx)
+                    fprintf('\t%i - ',j);
+                    fprintf('%s\n', files(idx(j)).name );
                 end
                 
                 % Prompt Selection
                 flag = true;
+                iselect = [];
                 while flag
                     try
                         mfile_to_run = erase(files(idx( iselect )).name,'.m' );
@@ -110,7 +116,10 @@
             try
                 run( mfile_to_run );
             catch e
-                fprintf(1,'Error in submission:\n\n\t %s',e.message)
+                fprintf('\nError in submission:');
+                fprintf('\n    %s',e.stack(1).name);
+                fprintf(' - Line %i:',e.stack(1).line);
+                fprintf(' %s',e.message);
             end
             
             % Reset variables
