@@ -69,12 +69,13 @@
         idx = find( flags==-1 );
         
         % Open the script to run
-        if isempty(idx)
-            disp('No Script file to run!')
-        else
-            
-            % Fork if there are multiple scripts in idx
-            if numel(idx)>1
+        switch numel(idx)
+            case 0
+                disp('No Script file to run!')
+                mfile_to_run = false;
+            case 1
+                mfile_to_run = erase(files(idx).name,'.m' );                
+            otherwise % >1
                 
                 % provide user of the options
                 fprintf('\nMultiple Scripts in File:\n');
@@ -83,7 +84,7 @@
                     fprintf('%s\n', files(idx(i)).name );
                 end
                 
-                % Prompit Selection
+                % Prompt Selection
                 flag = true;
                 while flag
                     try
@@ -94,7 +95,10 @@
                     end
                 end
                 
-            end
+        end
+        
+        % Only run if there was a file to run
+        if mfile_to_run
             
             % Lock current workspace from 
             save( 'temporary_save_state.mat' );
@@ -105,10 +109,10 @@
             % Run script 
             try
                 run( mfile_to_run );
-            catch
-                fprintf('Error in student submission\n');
+            catch e
+                fprintf(1,'Error in submission:\n\n\t %s',e.message)
             end
-
+            
             % Reset variables
             clearvars -except mfile_to_run temp_state_file; 
             
@@ -122,11 +126,11 @@
         rmpath( spath.subfolders{i} )
         
         % Wait for input
-        fprintf('\n Ready for new user. Enter:');
-        fprintf('\n\t enter to continue to next');
-        fprintf('\n\t -1 to quit');
-        fprintf('\n\t 0  to repeat');
-        fprintf('\n\t or the student number to jump to\n');
+        fprintf('\n\n Ready for new submission. Enter:');
+        fprintf('\n   enter to continue to next');
+        fprintf('\n   -1 to quit');
+        fprintf('\n   0  to repeat');
+        fprintf('\n   or the student number to jump to\n');
         dum = input('');
         
         % Process input as integer or a given index

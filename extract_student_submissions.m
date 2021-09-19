@@ -113,6 +113,9 @@ function [idx_zip, names, idx_dir] = check_folder_contents( folder )
         % Exclude hidden directories
         idx_dir( startsWith( names, '.' ) ) = 0; 
         
+        % Exclude "__MACOSX" folders (these are just mac hidden files)
+        idx_dir( strcmp( names, '__MACOSX' ) ) = 0; 
+        
     end
     
 end
