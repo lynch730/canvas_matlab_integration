@@ -2,3 +2,5 @@
 *.csv
 *.mat
 *.asv
+*.m~
+*.csv#
