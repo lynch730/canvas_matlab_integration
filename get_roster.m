@@ -92,6 +92,9 @@ function names = process_canvas_csv( csv_file_name )
        % Remove any whitespace in names
        names = strrep(names,' ','');
        
+       % Clear any empty cells
+       names(cellfun('isempty',names))        = []; 
+        
        % Split based on comma delimeter in cavnas file
        names = split(names,',');
        
