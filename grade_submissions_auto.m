@@ -43,7 +43,7 @@
         
         % Change folder
         addpath( spath.subfolders{i} )
-            
+        
         % Open folder in windows
         if open_explorer_flag 
             update_explorer_window( spath.subfolders{i} );

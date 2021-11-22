@@ -25,18 +25,39 @@
     % Number of students
     nstudents = size(class_roster,1);
     
-    % Ask for student number
-    i = input('Enter student folder number to grade: ');
+    % Print Roster for reference
+    fprintf( '\nRoster\n%s\n', repmat('-',1,30) );
+    for i = 1:nstudents
+        fprintf('%i/%i, ', [i,nstudents]  );
+        fprintf('%s, ', class_roster{i,1} );
+        fprintf('%s\n', class_roster{i,2} );
+    end
     
-    % Open Files in the students folder
-    fprintf('%i/%i, ', [i,nstudents]  );
-    fprintf('%s, ', class_roster{i,1} );
-    fprintf('%s\n', class_roster{i,2} );
+    %% Ask for student number
     
-    % List of student files
-    files = dir( spath.subfolders{i} );
+    % Check input
+    flag = false;
+    while ~flag
+        
+        % Attempt Input
+        try
+            
+            % Input Student Folder to Grade
+            i = input('\nEnter student folder number to grade:\n ');
+            
+            % List of student files - this will fail with bad input
+            files = dir( spath.subfolders{i} );
+            
+            % Turn off loop
+            flag = true;
+            
+        catch
+            % Do nothing
+        end
+        
+    end
     
-    % Boolean 
+    %% Boolean 
     flags = zeros( numel(files),1 );
     
     % Change folder
