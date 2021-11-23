@@ -119,8 +119,12 @@ function unpack_student_zip_files( folder )
         for j = find(idx_zip)
             
             % Unzip file in place
-            unzip( [ folder, fnames{j} ], folder );
-            
+            try
+                unzip( [ folder, fnames{j} ], folder );
+            catch
+                warning(['Error in unzipping file: ', folder, fnames{j} ])
+            end
+
             % Remove original zip file
             delete( [ folder, fnames{j} ] );
             
